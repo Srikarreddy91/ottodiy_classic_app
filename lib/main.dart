@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'widgets/classic_tab.dart';
 import 'widgets/wheels_tab.dart';
 import 'widgets/console_panel.dart';
+import 'widgets/connection_modal.dart';
 
 void main() {
   FlutterBluePlus.setLogLevel(LogLevel.verbose, color: true);
@@ -234,7 +235,16 @@ class _HomeScreenState extends State<HomeScreen>
                 ),
                 onPressed: isConnected
                     ? () => _btManager.disconnect()
-                    : () => _btManager.startScan(),
+                    : () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: const Color(0xFF111827),
+                          builder: (_) =>
+                              ConnectionModal(btManager: _btManager),
+                        );
+                        _btManager.startScan();
+                      },
               ),
             ),
             title: Column(
